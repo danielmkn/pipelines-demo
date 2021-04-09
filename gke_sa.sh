@@ -62,7 +62,6 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - users
   - groups
   - serviceaccounts
   - secrets
