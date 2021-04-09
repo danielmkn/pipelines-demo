@@ -32,7 +32,7 @@ resources:
       buildName: SampleApp
       buildNumber: '0.1.${run_number}'
 
-  - name: simplehelmRepo_chart
+  - name: simplehelmRepoChart
     type: GitRepo
     configuration:
       gitProvider: GitHubIntegration
@@ -92,7 +92,7 @@ pipelines:
           inputSteps:
             - name: push_image
           inputResources:
-            - name: simplehelmRepo_chart
+            - name: simplehelmRepoChart
           outputResources:
             - name: simplehelmChart
             - name: simpleHelmChartBuildInfo
