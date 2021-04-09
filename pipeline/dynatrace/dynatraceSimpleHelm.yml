@@ -1,0 +1,173 @@
+resources:
+  - name: helmDemoGitHub
+    type: GitRepo
+    configuration:
+      gitProvider: GitHubIntegration
+      # replace with your pipelines repository
+      path: danielmkn/jfrog-pipeline-extensions # if path is modified, change the name as well, per Pipelines doc
+      branches:
+        include: pipelines
+      buildOn:
+        commit: true
+
+  - name: simpleDockerImage # change
+    type: Image
+    configuration:
+      registry: simplehelmDockerIntegration
+      sourceRepository: art-docker-dynatrace
+      #imageName: partnership-art-docker-dynatrace.jfrog.io/simplehelm
+      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
+      imageTag: '${run_number}'
+
+  - name: simpleBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactoryIntegration
+      buildName: SampleApp
+      buildNumber: 1
+
+  - name: simpleHelmChartBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactoryIntegration
+      buildName: SampleApp
+      buildNumber: '0.1.${run_number}'
+
+  - name: simplehelmRepo_chart
+    type: GitRepo
+    configuration:
+      gitProvider: GitHubIntegration
+      path: danielmkn/jfrog-pipeline-extensions
+      branches:
+        include: pipelines
+      buildOn:
+        commit: false
+
+  - name: simplehelmChart
+    type: HelmChart
+    configuration:
+      sourceArtifactory: artifactoryIntegration
+      repository: simplecharts
+      chart: simplehelm
+      version: '0.1.${run_number}'
+
+pipelines:
+  - name: dynatrace_demo_helm
+    configuration:
+      environmentVariables:
+        readOnly:
+          my_releaseName: "simplehelm${run_number}"
+    steps:
+      - name: build_image
+        type: DockerBuild
+        configuration:
+          affinityGroup: buildAndPush
+          integrations:
+            - name: artifactoryIntegration
+          inputResources:
+            - name: helmDemoGitHub
+          dockerFileLocation: pipeline/dynatrace/
+          dockerFileName: Dockerfile
+          #dockerImageName: partnership-art-docker-dynatrace.jfrog.io/simplehelm
+          dockerImageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
+          dockerImageTag: $run_number
+
+      - name: push_image
+        type: DockerPush
+        configuration:
+          affinityGroup: buildAndPush
+          autoPublishBuildInfo: true
+          integrations:
+            - name: artifactoryIntegration
+          targetRepository: art-docker-dynatrace
+          inputSteps:
+            - name: build_image
+          outputResources:
+            - name: simpleBuildInfo
+            - name: simpleDockerImage # change
+
+      - name: helm_build
+        type: HelmPublish
+        configuration:
+          chartPath: pipeline/dynatrace/simplehelm/
+          affinityGroup: helm_install
+          inputSteps:
+            - name: push_image
+          inputResources:
+            - name: simplehelmRepo_chart
+          outputResources:
+            - name: simplehelmChart
+            - name: simpleHelmChartBuildInfo
+
+      # Install Dynatrace agent on the cluster. Use the separate namespace
+      - name: install_oneAgent_operator
+        type: Bash
+        configuration:
+          affinityGroup: helm_install
+          integrations:
+            - name: k8sIntegration
+            - name: dynatraceIntegration
+          inputSteps:
+            - name: helm_build
+        execution:
+          onStart:
+            - echo "Preparing for work..."
+          onExecute:
+            - echo "Installing and configuring OneAgent"
+            - kubectl config current-context
+            #- kubectl create namespace dynatrace
+            #- kubectl apply -f https://github.com/Dynatrace/dynatrace-oneagent-operator/releases/latest/download/kubernetes.yaml
+            #- kubectl -n dynatrace logs deployment/dynatrace-oneagent-operator
+            #- kubectl -n dynatrace create secret generic oneagent --from-literal="apiToken=${int_dynatraceIntegration_API_TOKEN}" --from-literal="paasToken=${int_dynatraceIntegration_PAAS_TOKEN}"
+            - curl -o cr.yaml https://raw.githubusercontent.com/Dynatrace/dynatrace-oneagent-operator/master/deploy/cr.yaml
+            ## configure cr.yaml file when we have all the data needed
+            #- kubectl apply -f cr.yaml
+          onSuccess:
+            - echo "Dynatrace OneAgent has beed successfully installed"
+          onFailure:
+            - echo "Failure"
+
+      - name: deploy_helm
+        type: HelmDeploy
+        configuration:
+          helmVersion: 3
+          affinityGroup: helm_install
+          releaseName: simplehelm${run_number}
+          integrations:
+            - name: k8sIntegration
+          inputResources:
+            - name: simplehelmChart
+          inputSteps:
+            - name: install_oneAgent_operator
+        execution:
+          onStart:
+            - kubectl config current-context
+            - add_run_variables CLUSTER="$(kubectl config current-context)"
+            - add_run_variables RELEASE_NAME="${my_releaseName}"
+            - printenv
+          onSuccess:
+            - kubectl get pods
+          onFailure:
+            - echo "Failure"
+
+      - name: modify_properties
+        type: Bash
+        configuration:
+          affinityGroup: helm_install
+          integrations:
+            - name: artifactoryIntegration
+          inputSteps:
+            - name: deploy_helm
+        execution:
+          onStart:
+            - echo "Preparing for work..."
+          onExecute:
+            - printenv
+            - echo "Modifying helm chart properties"
+            - echo "Set current time as a deployment time"
+            - TIME=$(date +%s)
+            - curl --location --request PUT "${int_artifactoryIntegration_url}/api/storage/simplecharts/simplehelm-0.1.0.tgz?properties=deployedOnCluster=${CLUSTER}%7ChelmInstallationName=${RELEASE_NAME}%7CdeploymentTimestamp=${TIME}" --header "Accept:application/json" --header "X-Jfrog-Art-Api:${int_artifactoryIntegration_apikey}"
+          onSuccess:
+            - echo ""
+          onFailure:
+            - echo "Failure"
