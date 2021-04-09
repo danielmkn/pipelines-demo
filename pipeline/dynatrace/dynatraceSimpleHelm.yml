@@ -1,12 +1,12 @@
 resources:
-  - name: helmDemoGitHub
+  - name: helmGitHub
     type: GitRepo
     configuration:
       gitProvider: GitHubIntegration
       # replace with your pipelines repository
-      path: danielmkn/jfrog-pipeline-extensions # if path is modified, change the name as well, per Pipelines doc
+      path: danielmkn/pipelines-demo # if path is modified, change the name as well, per Pipelines doc
       branches:
-        include: pipelines
+        include: main
       buildOn:
         commit: true
 
@@ -15,7 +15,6 @@ resources:
     configuration:
       registry: simplehelmDockerIntegration
       sourceRepository: art-docker-dynatrace
-      #imageName: partnership-art-docker-dynatrace.jfrog.io/simplehelm
       imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
       imageTag: '${run_number}'
 
@@ -37,9 +36,9 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: GitHubIntegration
-      path: danielmkn/jfrog-pipeline-extensions
+      path: danielmkn/pipelines-demo # replace with your repo
       branches:
-        include: pipelines
+        include: main
       buildOn:
         commit: false
 
@@ -65,10 +64,9 @@ pipelines:
           integrations:
             - name: artifactoryIntegration
           inputResources:
-            - name: helmDemoGitHub
+            - name: helmGitHub
           dockerFileLocation: pipeline/dynatrace/
           dockerFileName: Dockerfile
-          #dockerImageName: partnership-art-docker-dynatrace.jfrog.io/simplehelm
           dockerImageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
           dockerImageTag: $run_number
 
@@ -84,7 +82,7 @@ pipelines:
             - name: build_image
           outputResources:
             - name: simpleBuildInfo
-            - name: simpleDockerImage # change
+            - name: simpleDockerImage
 
       - name: helm_build
         type: HelmPublish
