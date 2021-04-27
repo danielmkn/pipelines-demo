@@ -93,10 +93,18 @@ pipelines:
             - name: push_image
           inputResources:
             - name: simplehelmRepoChart
-            - name: simpleDockerImage
           outputResources:
             - name: simplehelmChart
             - name: simpleHelmChartBuildInfo
+        execution:
+          onStart:
+            - echo "Preparing for work..."
+          onExecute:
+            - printenv
+          onSuccess:
+            - echo "Success"
+          onFailure:
+            - echo "Failure"
 
       # Install Dynatrace agent on the cluster. Use the separate namespace
       - name: install_oneAgent_operator
