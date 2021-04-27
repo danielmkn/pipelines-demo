@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: ${res_simpleDockerImage_imageName}
-  tag: ${res_simpleDockerImage_imageTag}
+  repository: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
+  tag: latest
   pullPolicy: IfNotPresent
   port: 80
