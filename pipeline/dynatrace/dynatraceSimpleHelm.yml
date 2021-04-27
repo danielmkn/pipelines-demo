@@ -93,6 +93,7 @@ pipelines:
             - name: push_image
           inputResources:
             - name: simplehelmRepoChart
+            - name: simpleDockerImage
           outputResources:
             - name: simplehelmChart
             - name: simpleHelmChartBuildInfo
