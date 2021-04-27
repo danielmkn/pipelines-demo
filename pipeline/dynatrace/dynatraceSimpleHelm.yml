@@ -99,6 +99,8 @@ pipelines:
         execution:
           onStart:
             - echo "Start"
+            - printenv
+
       # Install Dynatrace agent on the cluster. Use the separate namespace
       - name: install_oneAgent_operator
         type: Bash
@@ -137,6 +139,7 @@ pipelines:
             - name: k8sIntegrationMD
           inputResources:
             - name: simplehelmChart
+            - name: simpleDockerImage
           inputSteps:
             - name: install_oneAgent_operator
         execution:
