@@ -96,7 +96,9 @@ pipelines:
           outputResources:
             - name: simplehelmChart
             - name: simpleHelmChartBuildInfo
-
+        execution:
+          onStart:
+            - echo "Start"
       # Install Dynatrace agent on the cluster. Use the separate namespace
       - name: install_oneAgent_operator
         type: Bash
