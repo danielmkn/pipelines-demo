@@ -35,7 +35,7 @@ resources:
   - name: simplehelmRepoChart
     type: GitRepo
     configuration:
-      gitProvider: GitHubIntegration
+      gitProvider: GitHubIntegrationMD
       path: danielmkn/pipelines-demo # replace with your repo
       branches:
         include: install_helm
