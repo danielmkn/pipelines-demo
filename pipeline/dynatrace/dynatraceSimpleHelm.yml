@@ -2,11 +2,11 @@ resources:
   - name: helmGitHub
     type: GitRepo
     configuration:
-      gitProvider: GitHubIntegration
+      gitProvider: GitHubIntegrationMD
       # replace with your pipelines repository
       path: danielmkn/pipelines-demo # if path is modified, change the name as well, per Pipelines doc
       branches:
-        include: main
+        include: install_helm
       buildOn:
         commit: true
 
@@ -15,7 +15,7 @@ resources:
     configuration:
       registry: simplehelmDockerIntegration
       sourceRepository: art-docker-dynatrace
-      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
+      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm # check
       imageTag: '${run_number}'
 
   - name: simpleBuildInfo
@@ -38,7 +38,7 @@ resources:
       gitProvider: GitHubIntegration
       path: danielmkn/pipelines-demo # replace with your repo
       branches:
-        include: main
+        include: install_helm
       buildOn:
         commit: false
 
@@ -47,7 +47,7 @@ resources:
     configuration:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
-      chart: simplehelm
+      chart: simplehelm # change with nginx?
       version: '0.1.${run_number}'
 
 pipelines:
@@ -103,7 +103,7 @@ pipelines:
         configuration:
           affinityGroup: helm_install
           integrations:
-            - name: k8sIntegration
+            - name: k8sIntegrationMD
             - name: dynatraceIntegration
           inputSteps:
             - name: helm_build
@@ -132,7 +132,7 @@ pipelines:
           affinityGroup: helm_install
           releaseName: simplehelm${run_number}
           integrations:
-            - name: k8sIntegration
+            - name: k8sIntegrationMD
           inputResources:
             - name: simplehelmChart
           inputSteps:

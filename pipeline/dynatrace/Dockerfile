@@ -1,1 +1,1 @@
-FROM nginx:latest
+FROM docker.io/bitnami/nginx:1.19.10-debian-10-r6
