@@ -101,7 +101,6 @@ pipelines:
           onStart:
             - echo "Start"
             - printenv
-          onExecute:
             - ls -al
             - echo "${res_simplehelmChart2_version}"
 
