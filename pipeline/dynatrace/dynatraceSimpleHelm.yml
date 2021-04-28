@@ -32,24 +32,22 @@ resources:
       buildName: SampleApp
       buildNumber: '0.1.${run_number}'
 
-  - name: simplehelmRepoChart
+  - name: simplehelmRepoChart1
     type: GitRepo
     configuration:
       gitProvider: GitHubIntegrationMD
       path: danielmkn/pipelines-demo # replace with your repo
       branches:
         include: install_helm
-      files:
-        include: "/pipeline/dynatrace/simplehelm.*"
       buildOn:
         commit: false
 
-  - name: simplehelmChart
+  - name: simplehelmChart1
     type: HelmChart
     configuration:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
-      chart: simplehelm # change with nginx?
+      chart: simplehelm
       version: '0.1.2'
 
 pipelines:
@@ -94,9 +92,9 @@ pipelines:
           inputSteps:
             - name: push_image
           inputResources:
-            - name: simplehelmRepoChart
+            - name: simplehelmRepoChart1
           outputResources:
-            - name: simplehelmChart
+            - name: simplehelmChart1
             - name: simpleHelmChartBuildInfo
         execution:
           onStart:
@@ -140,7 +138,7 @@ pipelines:
           integrations:
             - name: k8sIntegrationMD
           inputResources:
-            - name: simplehelmChart
+            - name: simplehelmChart1
             - name: simpleDockerImage
           inputSteps:
             - name: install_oneAgent_operator
