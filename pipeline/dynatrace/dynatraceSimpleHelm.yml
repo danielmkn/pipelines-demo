@@ -163,6 +163,8 @@ pipelines:
           affinityGroup: helm_install
           integrations:
             - name: artifactoryIntegration
+          inputResources:
+            - name: simplehelmChart2
           inputSteps:
             - name: deploy_helm
         execution:
