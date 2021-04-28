@@ -21,7 +21,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: nginx
+name: simplehelm
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx
   - http://www.nginx.org

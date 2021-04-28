@@ -48,7 +48,7 @@ resources:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
       chart: simplehelm
-      version: '0.1.${run_number}'
+      version: '0.1.3'
 
 pipelines:
   - name: dynatrace_demo_helm
