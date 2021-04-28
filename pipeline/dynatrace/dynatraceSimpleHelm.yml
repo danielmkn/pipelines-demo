@@ -40,7 +40,7 @@ resources:
       branches:
         include: main
       buildOn:
-        commit: false
+        commit: true
 
   - name: simplehelmChart2
     type: HelmChart
