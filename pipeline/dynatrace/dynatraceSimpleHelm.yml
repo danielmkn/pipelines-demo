@@ -16,7 +16,7 @@ resources:
       registry: simplehelmDockerIntegration
       sourceRepository: art-docker-dynatrace
       imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
-      imageTag: ${run_number}
+      imageTag: $run_number
 
   - name: simpleBuildInfo
     type: BuildInfo
@@ -30,7 +30,7 @@ resources:
     configuration:
       sourceArtifactory: artifactoryIntegration
       buildName: SampleApp
-      buildNumber: ${run_number}
+      buildNumber: $run_number
 
   - name: simplehelmRepoChart1
     type: GitRepo
@@ -48,7 +48,7 @@ resources:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
       chart: busybox
-      version: ${run_number}
+      version: $run_number
 
 pipelines:
   - name: dynatrace_demo_helm

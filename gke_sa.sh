@@ -79,6 +79,7 @@ rules:
   - list
   - create
   - update
+  - patch
   - delete
 - apiGroups:
   - "authorization.k8s.io"
