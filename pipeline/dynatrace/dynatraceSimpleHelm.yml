@@ -93,8 +93,8 @@ pipelines:
           inputSteps:
             - name: push_image
           inputResources:
-            - trigger: false
             - name: simplehelmRepoChart1
+              trigger: false
           outputResources:
             - name: simplehelmChart2
             - name: simpleHelmChartBuildInfo
