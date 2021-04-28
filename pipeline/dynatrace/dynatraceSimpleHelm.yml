@@ -30,7 +30,7 @@ resources:
     configuration:
       sourceArtifactory: artifactoryIntegration
       buildName: SampleApp
-      buildNumber: '0.1.${run_number}'
+      buildNumber: '0.1.3'
 
   - name: simplehelmRepoChart1
     type: GitRepo
@@ -42,7 +42,7 @@ resources:
       buildOn:
         commit: false
 
-  - name: simplehelmChart1
+  - name: simplehelmChart2
     type: HelmChart
     configuration:
       sourceArtifactory: artifactoryIntegration
@@ -94,7 +94,7 @@ pipelines:
           inputResources:
             - name: simplehelmRepoChart1
           outputResources:
-            - name: simplehelmChart1
+            - name: simplehelmChart2
             - name: simpleHelmChartBuildInfo
         execution:
           onStart:
@@ -138,7 +138,7 @@ pipelines:
           integrations:
             - name: k8sIntegrationMD
           inputResources:
-            - name: simplehelmChart1
+            - name: simplehelmChart2
             - name: simpleDockerImage
           inputSteps:
             - name: install_oneAgent_operator
