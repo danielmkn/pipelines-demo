@@ -39,6 +39,8 @@ resources:
       path: danielmkn/pipelines-demo # replace with your repo
       branches:
         include: install_helm
+      files:
+        include: "/pipeline/dynatrace/simplehelm.*"
       buildOn:
         commit: false
 
@@ -55,7 +57,7 @@ pipelines:
     configuration:
       environmentVariables:
         readOnly:
-          my_releaseName: "simplehelm${run_number}"
+          my_releaseName: "simplehelm_${run_number}"
     steps:
       - name: build_image
         type: DockerBuild
@@ -134,7 +136,7 @@ pipelines:
         configuration:
           helmVersion: 3
           affinityGroup: helm_install
-          releaseName: simplehelm${run_number}
+          releaseName: simplehelm_${run_number}
           integrations:
             - name: k8sIntegrationMD
           inputResources:
