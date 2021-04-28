@@ -23,14 +23,14 @@ resources:
     configuration:
       sourceArtifactory: artifactoryIntegration
       buildName: SampleApp
-      buildNumber: 1
+      buildNumber: ${run_number}
 
   - name: simpleHelmChartBuildInfo
     type: BuildInfo
     configuration:
       sourceArtifactory: artifactoryIntegration
       buildName: SampleApp
-      buildNumber: ${run_number}
+      buildNumber: 0.0.0
 
   - name: simplehelmRepoChart1
     type: GitRepo
@@ -48,7 +48,7 @@ resources:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
       chart: busybox
-      version: ${run_number}
+      version: 0.0.0
 
 pipelines:
   - name: dynatrace_demo_helm
@@ -101,7 +101,6 @@ pipelines:
           onStart:
             - echo "Start"
             - printenv
-            - echo "${res_simplehelmChart2_version}"
 
       # Install Dynatrace agent on the cluster. Use the separate namespace
       - name: install_oneAgent_operator
