@@ -61,13 +61,17 @@ metadata:
 rules:
 - apiGroups:
   - ""
+  - "apps"
   resources:
   - groups
+  - services
+  - pods
   - serviceaccounts
   - secrets
   - deployments
   - pvcs
   - configmaps
+  - deployments
   verbs:
   - impersonate
   - get
