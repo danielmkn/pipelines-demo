@@ -50,7 +50,7 @@ resources:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
       chart: simplehelm # change with nginx?
-      version: '0.1.${run_number}'
+      version: '0.1.2'
 
 pipelines:
   - name: dynatrace_demo_helm
