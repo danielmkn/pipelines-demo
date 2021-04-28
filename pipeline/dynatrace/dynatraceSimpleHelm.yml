@@ -15,7 +15,7 @@ resources:
     configuration:
       registry: simplehelmDockerIntegration
       sourceRepository: art-docker-dynatrace
-      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm # check
+      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox # check
       imageTag: '${run_number}'
 
   - name: simpleBuildInfo
@@ -30,7 +30,7 @@ resources:
     configuration:
       sourceArtifactory: artifactoryIntegration
       buildName: SampleApp
-      buildNumber: '0.1.3'
+      buildNumber: '0.1.0'
 
   - name: simplehelmRepoChart1
     type: GitRepo
@@ -47,15 +47,15 @@ resources:
     configuration:
       sourceArtifactory: artifactoryIntegration
       repository: simplecharts
-      chart: simplehelm
-      version: '0.1.3'
+      chart: busybox
+      version: '0.1.0'
 
 pipelines:
   - name: dynatrace_demo_helm
     configuration:
       environmentVariables:
         readOnly:
-          my_releaseName: "simplehelm${run_number}"
+          my_releaseName: "busybox${run_number}"
     steps:
       - name: build_image
         type: DockerBuild
@@ -67,7 +67,7 @@ pipelines:
             - name: helmGitHub
           dockerFileLocation: pipeline/dynatrace/
           dockerFileName: Dockerfile
-          dockerImageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/simplehelm
+          dockerImageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
           dockerImageTag: $run_number
 
       - name: push_image
@@ -87,7 +87,8 @@ pipelines:
       - name: helm_build
         type: HelmPublish
         configuration:
-          chartPath: pipeline/dynatrace/simplehelm/
+          helmVersion: 3
+          chartPath: pipeline/dynatrace/busybox/
           affinityGroup: helm_install
           inputSteps:
             - name: push_image
@@ -134,7 +135,7 @@ pipelines:
         configuration:
           helmVersion: 3
           affinityGroup: helm_install
-          releaseName: simplehelm${run_number}
+          releaseName: busybox${run_number}
           integrations:
             - name: k8sIntegrationMD
           inputResources:
@@ -169,7 +170,7 @@ pipelines:
             - echo "Modifying helm chart properties"
             - echo "Set current time as a deployment time"
             - TIME=$(date +%s)
-            - curl --location --request PUT "${int_artifactoryIntegration_url}/api/storage/simplecharts/simplehelm-0.1.0.tgz?properties=deployedOnCluster=${CLUSTER}%7ChelmInstallationName=${RELEASE_NAME}%7CdeploymentTimestamp=${TIME}" --header "Accept:application/json" --header "X-Jfrog-Art-Api:${int_artifactoryIntegration_apikey}"
+            - curl --location --request PUT "${int_artifactoryIntegration_url}/api/storage/simplecharts/busybox-0.1.0.tgz?properties=deployedOnCluster=${CLUSTER}%7ChelmInstallationName=${RELEASE_NAME}%7CdeploymentTimestamp=${TIME}" --header "Accept:application/json" --header "X-Jfrog-Art-Api:${int_artifactoryIntegration_apikey}"
           onSuccess:
             - echo ""
           onFailure:
