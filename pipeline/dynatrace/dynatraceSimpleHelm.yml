@@ -10,12 +10,12 @@ resources:
       buildOn:
         commit: true
 
-  - name: simpleDockerImage # change
+  - name: simpleDockerImage
     type: Image
     configuration:
       registry: simplehelmDockerIntegration
       sourceRepository: art-docker-dynatrace
-      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox # check
+      imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
       imageTag: '${run_number}'
 
   - name: simpleBuildInfo
