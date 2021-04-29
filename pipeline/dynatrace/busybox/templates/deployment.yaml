@@ -19,6 +19,7 @@ spec:
         app: {{ include "busybox.name" . }}
         release: {{ .Release.Name }}
     spec:
+      imagePullSecrets: {{- range .Values.global.imagePullSecrets -}}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -38,8 +39,6 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
-      imagePullSecrets:
-      - name: regcred
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}

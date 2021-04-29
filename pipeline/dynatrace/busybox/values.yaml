@@ -10,7 +10,6 @@ image:
 #  repository: nginx
 #  tag: stable
   pullPolicy: IfNotPresent
-
 global:
   imagePullSecrets:
     - regcred
