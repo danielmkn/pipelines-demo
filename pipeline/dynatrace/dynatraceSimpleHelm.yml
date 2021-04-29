@@ -139,7 +139,6 @@ pipelines:
           releaseName: busybox${run_number}
           integrations:
             - name: k8sIntegrationMD
-            - name: artifactoryIntegration # test
           inputResources:
             - name: simplehelmChart2
             - name: simpleDockerImage

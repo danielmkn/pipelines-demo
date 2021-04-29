@@ -10,6 +10,8 @@ image:
 #  repository: nginx
 #  tag: stable
   pullPolicy: IfNotPresent
+  imagePullSecrets:
+    - regcred
 
 nameOverride: ""
 fullnameOverride: ""
