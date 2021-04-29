@@ -38,6 +38,8 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
+      imagePullSecrets:
+      - name: regcred
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
