@@ -150,7 +150,7 @@ pipelines:
         execution:
           onStart:
             - >-
-              COUNT=$(kubectl get secret regcred | wc -l)
+              COUNT="$(kubectl get secret regcred | wc -l)"
               if [[ "$COUNT" =~ (0) ]]
               then
                 echo "Creating regcred secret"
