@@ -5,6 +5,8 @@
 replicaCount: 1
 
 image:
+#  repository: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
+#  tag: 3
   repository: ${res_simpleDockerImage_imageName}
   tag: ${res_simpleDockerImage_imageTag}
 #  repository: nginx

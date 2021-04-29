@@ -139,6 +139,7 @@ pipelines:
           releaseName: busybox${run_number}
           integrations:
             - name: k8sIntegrationMD
+            - name: artifactoryIntegration
           inputResources:
             - name: simplehelmChart2
             - name: simpleDockerImage
@@ -148,6 +149,11 @@ pipelines:
             - values.yaml
         execution:
           onStart:
+            -> - kubectl create secret docker-registry regcred \
+                --docker-server=dynatracejtpp.jfrog.io \
+                --docker-username=${int_artifactoryIntegration_user} \
+                --docker-password=${int_artifactoryIntegration_apikey} \
+                --docker-email=danielmi@jfrog.com
             - kubectl config current-context
             - add_run_variables CLUSTER="$(kubectl config current-context)"
             - add_run_variables RELEASE_NAME="${my_releaseName}"
