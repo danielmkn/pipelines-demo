@@ -19,7 +19,7 @@ spec:
         app: {{ include "busybox.name" . }}
         release: {{ .Release.Name }}
     spec:
-      imagePullSecrets: {{- range .Values.global.imagePullSecrets -}}
+
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -50,3 +50,4 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      imagePullSecrets: {{ .Values.global.imagePullSecrets }}
