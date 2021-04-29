@@ -50,4 +50,5 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-      imagePullSecrets: {{ .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        - name: regcred
