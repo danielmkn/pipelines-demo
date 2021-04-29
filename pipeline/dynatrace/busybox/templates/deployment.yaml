@@ -51,4 +51,6 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       imagePullSecrets:
-        - name: regcred
+      {{- range .Values.global.imagePullSecrets }}
+        - {{ . }}
+      {{- end }}
