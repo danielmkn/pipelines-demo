@@ -149,9 +149,9 @@ pipelines:
             - values.yaml
         execution:
           onStart:
+            - COUNT="$(kubectl get secret regcred | wc -l)"
             - >-
-              COUNT="$(kubectl get secret regcred | wc -l)"
-              if [[ "$COUNT" =~ 0 ]]
+              if [ "${COUNT}" =~ 0 ]
               then
                 echo "Creating regcred secret"
                 kubectl create secret docker-registry regcred --docker-server=dynatracejtpp.jfrog.io --docker-username=${int_artifactoryIntegration_user} --docker-password=${int_artifactoryIntegration_apikey}
