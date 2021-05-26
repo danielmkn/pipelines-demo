@@ -1,5 +1,5 @@
 resources:
-  - name: helmGitHub
+  - name: helmGitHub1
     type: GitRepo
     configuration:
       gitProvider: GitHubIntegrationMD
@@ -10,7 +10,7 @@ resources:
       buildOn:
         commit: true
 
-  - name: simpleDockerImage
+  - name: simpleDockerImage1
     type: Image
     configuration:
       registry: simplehelmDockerIntegration
@@ -18,14 +18,14 @@ resources:
       imageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
       imageTag: ${run_number}
 
-  - name: simpleBuildInfo
+  - name: simpleBuildInfo1
     type: BuildInfo
     configuration:
       sourceArtifactory: artifactoryIntegration
       buildName: SampleApp
       buildNumber: ${run_number}
 
-  - name: simpleHelmChartBuildInfo
+  - name: simpleHelmChartBuildInfo1
     type: BuildInfo
     configuration:
       sourceArtifactory: artifactoryIntegration
@@ -64,7 +64,7 @@ pipelines:
           integrations:
             - name: artifactoryIntegration
           inputResources:
-            - name: helmGitHub
+            - name: helmGitHub1
           dockerFileLocation: pipeline/dynatrace/
           dockerFileName: Dockerfile
           dockerImageName: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
@@ -81,8 +81,8 @@ pipelines:
           inputSteps:
             - name: build_image
           outputResources:
-            - name: simpleBuildInfo
-            - name: simpleDockerImage
+            - name: simpleBuildInfo1
+            - name: simpleDockerImage1
 
       - name: helm_build
         type: HelmPublish
@@ -97,7 +97,7 @@ pipelines:
               trigger: false
           outputResources:
             - name: simplehelmChart2
-            - name: simpleHelmChartBuildInfo
+            - name: simpleHelmChartBuildInfo1
         execution:
           onStart:
             - echo "Start"
@@ -142,7 +142,7 @@ pipelines:
             - name: artifactoryIntegration
           inputResources:
             - name: simplehelmChart2
-            - name: simpleDockerImage
+            - name: simpleDockerImage1
           inputSteps:
             - name: install_oneAgent_operator
           valueFilePaths:
