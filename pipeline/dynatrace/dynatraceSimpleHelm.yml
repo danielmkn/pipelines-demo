@@ -51,7 +51,7 @@ resources:
       version: 0.0.0
 
 pipelines:
-  - name: dynatrace_demo_helm
+  - name: dynatrace_demo_helm_daniel
     configuration:
       environmentVariables:
         readOnly:
