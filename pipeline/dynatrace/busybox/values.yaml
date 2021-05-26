@@ -7,8 +7,8 @@ replicaCount: 1
 image:
 #  repository: dynatracejtpp.jfrog.io/art-docker-dynatrace/busybox
 #  tag: 3
-  repository: ${res_simpleDockerImage_imageName}
-  tag: ${res_simpleDockerImage_imageTag}
+  repository: ${res_simpleDockerImage1_imageName}
+  tag: ${res_simpleDockerImage1_imageTag}
 #  repository: nginx
 #  tag: stable
   pullPolicy: IfNotPresent
