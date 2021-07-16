@@ -71,7 +71,6 @@ rules:
   - deployments
   - pvcs
   - configmaps
-  - deployments
   verbs:
   - impersonate
   - get
