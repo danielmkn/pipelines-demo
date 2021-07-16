@@ -57,12 +57,13 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: teleport-role
+  name: dynatrace-role
 rules:
 - apiGroups:
-  - ""
+  - "*"
   - "apps"
   resources:
+  - "*"
   - groups
   - services
   - pods
@@ -71,14 +72,27 @@ rules:
   - deployments
   - pvcs
   - configmaps
+  - deployments
+  - namespaces
+  - roles
+  - podsecuritypolicies
+  - customresourcedefinitions
+  - clusterroles
+  - rolebindings
+  - clusterrolebindings
+  - events
+  - oneagentapms
+  - leases
+  - nodes
+  - mutatingwebhookconfigurations
   verbs:
+  - use
   - impersonate
   - get
   - watch
   - list
   - create
   - update
-  - patch
   - delete
 - apiGroups:
   - "authorization.k8s.io"
@@ -91,11 +105,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: teleport-crb
+  name: dynatrace-crb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: teleport-role
+  name: dynatrace-role
 subjects:
 - kind: ServiceAccount
   name: ${SA_NAME}
